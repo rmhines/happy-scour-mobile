@@ -45,6 +45,16 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.spots = Spot.query();
 })
 
-.controller('SpotCtrl', function($scope, $stateParams, Spot) {
-  $scope.spot = Spot.get({spotId: $stateParams.spotId});
+//.controller('SpotCtrl', function($scope, $stateParams, Spot) {
+//  $scope.spot = Spot.get({spot_id: $stateParams.spotId});
+//});
+
+.controller('SpotCtrl', function($scope, $http, $stateParams) {
+  console.log($stateParams);
+  $http.get('https://happy-scour-api.herokuapp.com/spots/' + $stateParams.id).then(function(resp) {
+    console.log('Success', resp);
+    $scope.spot = resp.data
+  }, function(err) {
+    console.error('ERR', err);
+  })
 });

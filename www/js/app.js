@@ -24,8 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
@@ -60,7 +59,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     })
 
     .state('app.spot', {
-      url: "/spots/:spotId",
+      url: "/spot/:spotId",
       views: {
         'menuContent': {
           templateUrl: "templates/spot.html",
