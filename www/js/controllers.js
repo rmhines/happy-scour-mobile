@@ -51,7 +51,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 .controller('SpotCtrl', function($scope, $http, $stateParams) {
   console.log($stateParams);
-  $http.get('https://happy-scour-api.herokuapp.com/spots/' + $stateParams.id).then(function(resp) {
+  $http.get('https://happy-scour-api.herokuapp.com/spots/' + $stateParams.spotId).then(function(resp) {
     console.log('Success', resp);
     $scope.spot = resp.data
   }, function(err) {
