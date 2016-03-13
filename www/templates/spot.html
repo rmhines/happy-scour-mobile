@@ -5,22 +5,25 @@
         <h4>{{spot.address}}</h4>
         <h3>{{spot.times}}</h3>
         <h2>{{spot.name}}</h2>
-        <p>{{spot.tags}}</p>
+        <p><b>Tags: </b><span ng-repeat="tag in spot.tags">+{{tag}} </span></p>
       </div>
       <div class="item item-body">
         <p>{{spot.description}}</p>
       </div>
-      <!--<div class="item tabs tabs-secondary tabs-icon-left">-->
-        <!--<a class="tab-item">-->
-          <!--<i class="icon ion-thumbsup">Like</i>-->
-        <!--</a>-->
-        <!--<a class="tab-item">-->
-          <!--<i class="icon ion-chatbox">Comment</i>-->
-        <!--</a>-->
-        <!--<a class="tab-item">-->
-          <!--<i class="icon ion-share">Share</i>-->
-        <!--</a>-->
-      <!--</div>-->
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item">
+          <i class="icon ion-thumbsup"></i>
+          Like
+        </a>
+        <a class="tab-item">
+          <i class="icon ion-chatbox"></i>
+          Comment
+        </a>
+        <a class="tab-item" ng-click="share()">
+          <i class="icon ion-share"></i>
+          Share
+        </a>
+      </div>
     </div>
   </ion-content>
 </ion-view>

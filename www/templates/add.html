@@ -1,0 +1,31 @@
+<ion-view view-title="Add a New Spot">
+    <ion-content>
+        <form ng-submit="addSpot()">
+            <div class="list">
+                <label class="item item-input">
+                    <span class="input-label">Name</span>
+                    <input type="text" ng-model="spotData.name">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Address</span>
+                    <input type="text" ng-model="spotData.address">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Times</span>
+                    <input type="text" ng-model="spotData.times">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Website</span>
+                    <input type="text" ng-model="spotData.website">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Description</span>
+                    <input type="text" ng-model="spotData.description">
+                </label>
+                <label class="item">
+                    <button class="button button-block button-positive" type="submit">Submit</button>
+                </label>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

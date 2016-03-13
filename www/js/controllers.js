@@ -1,6 +1,6 @@
-angular.module('starter.controllers', ['starter.services'])
+angular.module('starter.controllers', ['starter.services', 'ngOpenFB'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $http, $ionicModal, $timeout, ngFB) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -19,25 +19,26 @@ angular.module('starter.controllers', ['starter.services'])
     $scope.modal = modal;
   });
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
   // Open the login modal
   $scope.login = function() {
     $scope.modal.show();
   };
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
+  $scope.fbLogin = function () {
+    ngFB.login({scope: 'email'}).then(
+      function (response) {
+        if (response.status === 'connected') {
+          console.log('Facebook login succeeded');
+          $scope.closeLogin();
+        } else {
+          alert('Facebook login failed');
+        }
+      });
   };
 })
 
@@ -45,16 +46,60 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.spots = Spot.query();
 })
 
-//.controller('SpotCtrl', function($scope, $stateParams, Spot) {
-//  $scope.spot = Spot.get({spot_id: $stateParams.spotId});
-//});
+.controller('AddCtrl', function($scope, $ionicPopup, NewSpot, $location) {
+  $scope.showAlert = function() {
+    $ionicPopup.alert({
+      title: 'Success',
+      content: 'Spot has been added!'
+    }).then(function(res) {
+      console.log('Test Alert Box');
+      $location.path('/spots');
+      window.location.reload();
+    });
+  };
 
-.controller('SpotCtrl', function($scope, $http, $stateParams) {
-  console.log($stateParams);
-  $http.get('https://happy-scour-api.herokuapp.com/spots/' + $stateParams.spotId).then(function(resp) {
-    console.log('Success', resp);
-    $scope.spot = resp.data
-  }, function(err) {
-    console.error('ERR', err);
-  })
+  $scope.spotData = {};
+
+  // Perform the login action when the user submits the login form
+  $scope.addSpot = function() {
+    console.log('Adding spot', $scope.spotData);
+    var spot = new NewSpot($scope.spotData);
+    spot.$save();
+    $scope.spotData = {};
+    $scope.showAlert();
+  };
+})
+
+.controller('SpotCtrl', function($scope, $stateParams, Spot, ngFB) {
+  $scope.spot = Spot.get({spot_id: $stateParams.spotId});
+
+  $scope.share = function (event) {
+    ngFB.api({
+      method: 'POST',
+      path: '/me/feed',
+      params: {
+        message: "Come join me at: '" + $scope.spot.name + "' from " +
+        $scope.spot.times
+      }
+    }).then(
+      function () {
+        alert('The session was shared on Facebook');
+      },
+      function () {
+        alert('An error occurred while sharing this session on Facebook');
+      });
+  };
+})
+
+.controller('ProfileCtrl', function ($scope, ngFB) {
+  ngFB.api({
+    path: '/me',
+    params: {fields: 'id,name'}
+  }).then(
+      function (user) {
+        $scope.user = user;
+      },
+      function (error) {
+        alert('Facebook error: ' + error.error_description);
+      });
 });
